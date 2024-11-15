@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Item</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Item</h1>
+        <form method="post" class="mt-3">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="{% url 'item_list' %}" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+</body>
+</html>
