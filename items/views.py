@@ -2,6 +2,25 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Item
 from .forms import ItemForm
 
+# Vista de Formulario
+def formulario(request):
+    return render(request, 'Formulario/formulario_view.html')
+
+# Vista de Asignaciones
+def asignaciones(request):
+    return render(request, 'Asignaciones/asignaciones_view.html')
+
+# Vista de Realimentacion
+def realimentacion(request):
+    return render(request, 'Realimentacion/realimentacio_view.html')
+
+# Vista de Usuarios
+def usuarios(request):
+    return render(request, 'Usuarios/usuarios_view.html')
+
+
+
+
 # Vista para listar los items
 def item_list(request):
     items = Item.objects.all()

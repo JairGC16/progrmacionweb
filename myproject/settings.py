@@ -39,6 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Agrega la aplicación items aquí
     'items',
+    'home',
+    'formularios',
+    'form',
+    'accounts',
+    'asignaciones',
+    'respuestas',
+    'feedback',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +63,9 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',  # Esto le indica a Django que busque plantillas en la carpeta 'templates' en el directorio base
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

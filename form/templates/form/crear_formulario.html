@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Dashboard - SB Admin</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="./../../static/css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            {% include 'Componentes/navbar_admin.html' %}
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                {% include 'Componentes/sidebar_admin.html' %}
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Creacion de Formulario</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Crear tus grupos de preguntas</li>
+                        </ol>
+
+                        <!-- Crear formulario -->
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre del Formulario</label>
+                                <input class="form-control" id="nombre" name="nombre" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+                            </div>
+
+                            <div class="d-flex">
+                                <button type="submit" class="btn btn-primary ms-auto m-3">Crear Formulario</button>
+                            </div>
+                        </form>
+
+                        <hr>
+                        <h3>Agregar tus preguntas al formulario:</h3>
+                        <!-- Agregar preguntas -->
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <!-- Selección del formulario para agregar preguntas -->
+                            <div class="mb-3">
+                                <label for="grupo_formulario" class="form-label">Seleccione el Formulario</label>
+                                <select name="grupo_formulario" class="form-control" required>
+                                    {% for formulario in formularios %}
+                                        <option value="{{ formulario.id }}">{{ formulario.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Campo para ingresar la pregunta -->
+                            <div class="mb-3">
+                                <label for="pregunta" class="form-label">Pregunta</label>
+                                <input type="text" class="form-control" id="pregunta" name="pregunta" required placeholder="Escribe la pregunta">
+                            </div>
+
+                            <!-- Tipo de respuesta -->
+                            <div class="mb-3">
+                                <label for="tipo_respuesta" class="form-label">Tipo de Respuesta</label>
+                                <select name="tipo_respuesta" class="form-control" required>
+                                    <option value="abierta">Abierta</option>
+                                    <option value="cerrada">Sí/No</option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex">
+                                <button type="submit" class="btn btn-primary ms-auto m-3">Agregar Pregunta</button>
+                            </div>
+                        </form>
+
+                        <hr>
+
+                        <!-- Tabla de preguntas relacionadas con el formulario seleccionado -->
+                        <h3>Preguntas del Formulario:</h3>
+
+                        <!-- Selección de formulario para filtrar preguntas -->
+                        <form method="GET">
+                            <div class="mb-3">
+                                <label for="grupo_formulario" class="form-label">Filtrar Preguntas por Formulario</label>
+                                <select name="grupo_formulario" class="form-control" onchange="this.form.submit()">
+                                    <option value="">Seleccione un formulario</option>
+                                    {% for formulario in formularios %}
+                                        <option value="{{ formulario.id }}" {% if formulario.id == request.GET.grupo_formulario %}selected{% endif %}>{{ formulario.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </form>
+                        <div class="mb-3">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Pregunta</th>
+                                        <th scope="col">Tipo de Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pregunta in preguntas %}
+                                        <tr>
+                                            <td>{{ pregunta.texto }}</td>
+                                            <td>{{ pregunta.get_tipo_respuesta_display }}</td>  <!-- Muestra la descripción del tipo de respuesta -->
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="2">No hay preguntas asociadas a este formulario.</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; SkillScope 2024</div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="./../../static/js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="./../../static/assets/demo/chart-area-demo.js"></script>
+        <script src="./../../static/assets/demo/chart-bar-demo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="./../../static/js/datatables-simple-demo.js"></script>
+
+        <script>
+            document.getElementById('agregarPregunta').addEventListener('click', function () {
+                var inputPregunta = document.querySelector('input[name="pregunta"]');
+                var preguntaTexto = inputPregunta.value;
+                var selectTipoRespuesta = document.querySelector('select[name="tipo_respuesta"]');
+                var tipoRespuesta = selectTipoRespuesta.value;
+
+                // Verifica que la pregunta no esté vacía
+                if (preguntaTexto.trim() !== '') {
+                    var tabla = document.getElementById('tablaPreguntas').getElementsByTagName('tbody')[0];
+
+                    // Crear una nueva fila para la pregunta y tipo de respuesta
+                    var nuevaFila = document.createElement('tr');
+
+                    // Crear una celda para la pregunta
+                    var celdaPregunta = document.createElement('td');
+                    celdaPregunta.textContent = preguntaTexto;
+                    nuevaFila.appendChild(celdaPregunta);
+
+                    // Crear una celda para el tipo de respuesta
+                    var celdaTipoRespuesta = document.createElement('td');
+                    celdaTipoRespuesta.textContent = tipoRespuesta === 'abierta' ? 'Abierta' : 'Sí/No';
+                    nuevaFila.appendChild(celdaTipoRespuesta);
+
+                    // Añadir la fila a la tabla
+                    tabla.appendChild(nuevaFila);
+
+                    // Limpiar el campo de la última pregunta ingresada
+                    inputPregunta.value = '';
+                    selectTipoRespuesta.value = 'abierta';  // Resetear tipo de respuesta
+                }
+            });
+        </script>
+    </body>
+</html>
